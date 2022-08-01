@@ -66,12 +66,7 @@ import { ref } from 'vue';
   }
 
   function removeControl(index: any) {
-    todosForm.removeControl(index);
-    console.log(todosForm)
-  }
-
-  function setValue() {
-    todosForm.get("0").setValue({ done: true, text: 'dynamic text' })
+    (todosForm.get("todoList") as FormArray).removeControl(index);
   }
 
 </script>
