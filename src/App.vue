@@ -6,7 +6,7 @@
         <div class="d-flex flex-column">
           <div class="d-flex">
             <input type="text" v-model="todosForm.newTodo.value" placeholder="" class="form-control">
-            <button class="btn btn-success" :disabled="todosForm.newTodo.hasError('minLength')" @click="addTodo()">Add</button>
+            <button class="btn btn-success" :disabled="!todosForm.newTodo.value || todosForm.newTodo.hasError('minLength')" @click="addTodo()">Add</button>
           </div>
           <div class="invalid-feedback" style="display: block" v-if="todosForm.newTodo.hasError('minLength')">
             Minimum length 10 characters without spaces
