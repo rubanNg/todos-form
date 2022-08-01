@@ -42,6 +42,10 @@
       </div>
     </div>
   </div>
+
+  <div class="container">
+    <button class="btn btn-success" @click="logForm()">log fform</button>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -63,10 +67,15 @@ import { ref } from 'vue';
       })
     ]);
     todosForm.get("newTodo").setValue(null);
+    todosForm.get("newTodo").clearErrors();
   }
 
   function removeControl(index: any) {
     (todosForm.get("todoList") as FormArray).removeControl(index);
+  }
+
+   function logForm() {
+    console.log({ todosForm })
   }
 
 </script>
