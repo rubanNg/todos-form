@@ -1,82 +1,89 @@
 <template>
-  <div class="container d-flex justify-content-center">
-    <div class="d-flex flex-column col-sm-6">
-      <h1 class="d-flex justify-content-center">Todos</h1>
-      <div class="mb-6 row">
-        <div class="d-flex flex-column">
-          <div class="d-flex">
-            <input type="text" v-model="todosForm.newTodo.value" placeholder="" class="form-control">
-            <button class="btn btn-success" :disabled="!todosForm.newTodo.value || todosForm.newTodo.hasError('minLength')" @click="addTodo()">Add</button>
-          </div>
-          <div class="invalid-feedback" style="display: block" v-if="todosForm.newTodo.hasError('minLength')">
-            Minimum length 10 characters without spaces
-          </div>
-          <div class="invalid-feedback" style="display: block" v-if="todosForm.newTodo.hasError('required')">
-            Required name
-          </div>
-        </div>
+  <div class="container justify-content-center">
+    <h1 @click="add()">Hello</h1>
+
+    <br>
+    <div class="d-flex flex-column">
+      <div class="d-flex">
+        <input type="text" class="form-control" v-model="group.get('selected').value">
+        <button @click="add()" :disabled="!group.get('selected').value" class="btn btn-success">Add</button>
       </div>
-
-      <template v-for="(row, index) in todosForm.todoList.controls" :key="index">
-        <hr/>
-        <div class="mb-6 mp-6 row">
-          <div class="d-flex">
-            <div class="d-flex justify-content-center align-items-center m-1">
-              <input class="form-check-input" type="checkbox" v-model="row.done.value">
-            </div>
-            <input type="text" :disabled="row.done.value" v-model="row.text.value" class="form-control">
-            <div class="d-flex justify-content-center align-items-center m-1">
-              <button class="btn btn-success" @click="removeControl(index)">Remove</button>
-            </div>
-          </div>
-        </div>
-      </template>
-
-
+      <span style="color: red" v-if="group.get('selected').hasError('required')">Обязательное поле!!!</span>
     </div>
+    <hr>
 
-    <div class="d-flex flex-column col-sm-6" style="padding-left: 50px;font-weight: 600;">
-      <h1 class="d-flex justify-content-center">Value</h1>
-      <div class="mb-6 row">
-        <pre>{{ todosForm.value }}</pre>
-      </div>
-    </div>
-  </div>
 
-  <div class="container">
-    <button class="btn btn-success" @click="logForm()">log fform</button>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="(control, index) in group.get('values').controls" :key="index">{{ control.value }}</li>
+    </ul>
+
+
+    <h1>FormGroup</h1>
+    <div><pre>{{ group.value }}</pre></div>
+
+    <h1>FormArray</h1>
+    <div><pre>{{ simpleArrayForm.value }}</pre></div>
+
+    <h1>Nested value</h1>
+    group.get("test.nested.nested_nested.0.arrayGroup.array1.0")
+    <h3>{{ group.get("test.nested.nested_nested.0.arrayGroup.array1.0").value }}</h3>
+    //OR
+    group.get([test, nested, nested_nested , 0, arrayGroup, array1, 0])
+    <h3>{{ group.get(["test", "nested", "nested_nested" , 0, "arrayGroup", "array1", 0]).value }}</h3>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ReactiveForm, FormControl, FormGroup, FormArray, Validators } from 'reactive-vue-form'
-import { ref } from 'vue';
-
-  const todosForm = new ReactiveForm({
-    newTodo: new FormControl('', [Validators.minLength(10), Validators.required]),
-    todoList: new FormArray([])
-  });
-  const todoText = ref(null);
+  import { FormControl, FormGroup, FormArray, Validators } from 'reactive-vue-form'
 
 
-  function addTodo() {
-    (todosForm.get("todoList") as FormArray).setControls([
-      new FormGroup({
-        done: new FormControl(false),
-        text: new FormControl(todosForm.get("newTodo").value),
+  const group = new FormGroup({
+    selected: new FormControl('', [Validators.required]),
+    values: new FormArray([]),
+    test: new FormGroup({
+      nested: new FormGroup({
+        nested_nested: new FormArray([
+          new FormGroup({
+            arrayGroup: new FormGroup({
+              array1: new FormArray([
+                new FormControl('deep')
+              ])
+            })
+          }),
+          new FormControl("array item")
+        ]),
+        single: new FormControl('single'),
+        array: new FormArray([
+          new FormGroup({
+            arrayGroup: new FormGroup({
+              array1: new FormArray([
+                new FormControl('deep')
+              ])
+            })
+          }),
+          new FormControl("array item")
+        ])
       })
+    })
+  });
+
+  const simpleArrayForm = new FormArray([
+    new FormControl(1),
+    new FormControl(2),
+    new FormControl(3),
+    new FormControl(4),
+  ]);
+
+
+
+  function add() {
+    (group.controls.values as FormArray).addControls([
+      new FormControl(group.controls.selected.value)
     ]);
-    todosForm.get("newTodo").setValue(null);
-    todosForm.get("newTodo").clearErrors();
+    group.controls.selected.setValue('');
+    console.log(group);
   }
 
-  function removeControl(index: any) {
-    (todosForm.get("todoList") as FormArray).removeControl(index);
-  }
-
-   function logForm() {
-    console.log({ todosForm })
-  }
 
 </script>
 
