@@ -41,8 +41,8 @@
       list: new FormArray([], [childsCount]),
     });
 
-    function childsCount(group: AbstractControl) {
-      if ((group as FormArray).controls.length < 5) {
+    function childsCount(list: AbstractControl) {
+      if ((list as FormArray).controls.length < 5) {
         return { length: "need 5 childs" }
       }
       return null;
