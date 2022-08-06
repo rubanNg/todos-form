@@ -11,7 +11,7 @@
     "@highlightjs/vue-plugin": "^2.1.0",
     "core-js": "^3.6.5",
     "highlight.js": "^11.6.0",
-    "reactive-vue-form": "^1.0.126",
+    "reactive-vue-form": "^1.0.128",
     "vue": "^3.0.0"
   },
   "devDependencies": {
