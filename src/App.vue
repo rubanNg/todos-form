@@ -1,6 +1,6 @@
 <template>
-  <!-- <control/>
-  <group/> -->
+  <control/>
+  <group/>
   <validation/>
 </template>
 

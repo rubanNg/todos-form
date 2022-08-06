@@ -23,12 +23,15 @@
       
       <hr>
 
-      <button @click="submit()" >status: {{ main.valid }}</button>
-       <button @click="setErrors()" >setErrors</button>
+      <h2>FORM STATUS : {{ main.valid }}</h2>
+      <div>
+        <button @click="submit()" >console.log(form)</button>
+        <button @click="setErrors()" >setErrors</button>
+      </div>
     </div>
 
     <div class="pt-3">
-      <highlightjs language='javascript' :code="''" />
+      <highlightjs language='javascript' :code="code" />
     </div>
   </div>
 </template>
@@ -36,6 +39,33 @@
 <script lang="ts" setup>
   import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from "reactive-vue-form";
 
+  const code = `
+    import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from "reactive-vue-form";
+
+
+    function firstChild(control: AbstractControl) {
+      if ((control as FormArray)?.at(0)?.value != 1) return { order: "first order must be 1" }
+      return null;
+    }
+
+    const main = new FormGroup({
+      one: new FormControl(null, Validators.required),
+      two: new FormControl(null, Validators.required),
+      order: new FormArray([
+        new FormControl(null, Validators.required),
+        new FormControl(null, Validators.required),
+        new FormControl(null, Validators.required)
+      ], firstChild),
+    });
+
+    function submit() {
+      console.log(main)
+    }
+    function setErrors() {
+      main.get('one').addErrors({b: true });
+      main.get('order.1').addErrors({order1: true });
+    }
+  `
 
   function firstChild(control: AbstractControl) {
     if ((control as FormArray)?.at(0)?.value != 1) return { order: "first order must be 1" }
