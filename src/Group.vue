@@ -6,7 +6,9 @@
     <div class="d-flex">
       <input class="form-control mb-3" :class="{ 'is-invalid': group.get('one').errors }"  type="text" v-model="group.get('one').value">
     </div>
-    <button class="btn btn-success" :disabled="!group.get('one').value"  @click="addToList()">add to list</button>
+    <div>
+      <button class="btn btn-success" :disabled="!group.get('one').value"  @click="addToList()">add to list</button>
+    </div>
     <div class="d-flex  pt-2">
       <ul class="list-group w-100">
         <li v-for="(control, index) in group.get('list').controls" :key="index">
@@ -63,7 +65,7 @@
   `
 
   const group = new FormGroup({
-    one: new FormControl(),
+    one: new FormControl(null, Validators.required),
     list: new FormArray([], [childsCount]),
   });
 

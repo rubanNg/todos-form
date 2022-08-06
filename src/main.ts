@@ -2,6 +2,7 @@ import { App as Vue, createApp, DirectiveBinding, VNode } from 'vue'
 import App from "../src/App.vue"
 import Control from "../src/Control.vue"
 import Group from "../src/Group.vue"
+import Validation from "../src/Validation.vue"
 import { formControlDirective } from 'reactive-vue-form'
 
 import 'highlight.js/styles/stackoverflow-light.css'
@@ -15,6 +16,7 @@ const app = createApp(App);
 
 app.component("control", Control);
 app.component("group", Group)
+app.component("validation", Validation)
 
 
 app.use(hljsVuePlugin)
